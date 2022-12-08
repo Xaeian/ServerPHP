@@ -1,0 +1,27 @@
+@host = http://localhost:8080
+#@host = http://api.server.pl
+
+POST {{host}}/auth/login/ HTTP/1.1
+content-type: text/plain
+
+{ "user": "admin", "password": "sqrt" }
+### login by JSON
+
+POST {{host}}/auth/login/ HTTP/1.1
+content-type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="user"
+
+test
+--boundary
+Content-Disposition: form-data; name="password"
+
+sqrt
+### login by FORM
+
+POST {{host}}/auth/create/ HTTP/1.1
+content-type: text/plain
+
+{ "user": "newuser", "email": "newemail@sqrt.pl", "password": "myp@ssw0rd" }
+### create new user

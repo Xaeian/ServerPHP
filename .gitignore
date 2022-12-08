@@ -1,0 +1,17 @@
+app/*
+!app/auth/
+!app/file/
+web/*
+cfg/server.ini
+scr/*
+lib/*
+!app/readme.md
+!web/readme.md
+!lib/readme.md
+!scr/readme.md
+**/__pycache__/
+*.sqlite
+*.log
+*.var
+*.tmp
+*.py[cod]

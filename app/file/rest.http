@@ -1,0 +1,8 @@
+@host = http://localhost:8080
+#@host = http://api.server.pl
+
+GET {{host}}/file/lab/1/11.jpg HTTP/1.1
+### get FILE '/lab/1/11.jpg'
+
+GET {{host}}/file/lab/ HTTP/1.1
+### get ZIP-ed folder '/lab/'

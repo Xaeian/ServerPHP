@@ -1,0 +1,4 @@
+id,name,email,password,active,level,created_at
+1,admin,es@sqrt.pl,dd1de98e8b0e34d5cf5396e83036f4d5,True,0,"2022-12-11 17:10:00"
+2,adam,adam@sqrt.pl,dd1de98e8b0e34d5cf5396e83036f4d5,True,2,"2022-12-11 19:42:00"
+3,marta,marta@sqrt.pl,dd1de98e8b0e34d5cf5396e83036f4d5,True,2,"2022-12-11 19:42:00"
