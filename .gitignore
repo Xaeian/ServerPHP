@@ -1,6 +1,8 @@
 app/*
 !app/auth/
 !app/file/
+app/file/*/
+!app/file/#/
 web/*
 cfg/server.ini
 scr/*

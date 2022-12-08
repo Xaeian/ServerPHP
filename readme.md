@@ -1,4 +1,4 @@
-### Structure
+## Structure
 
 - `api/` - routing folder for backend applications/services located in the `app` folder
 - `app/` - backend applications/services
