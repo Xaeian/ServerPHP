@@ -155,7 +155,9 @@ class Router
     foreach($this->users as $user) {
       if($user["active"] && (strtolower($user["name"]) == $name || $user["email"] == $name) && $user["password"] == $passwd) {
         $_SESSION["auth"] = new stdClass();
+        $_SESSION["auth"]->id = $user["id"];
         $_SESSION["auth"]->user = $user["name"];
+        $_SESSION["auth"]->email = $user["email"];
         $_SESSION["auth"]->level = (int)$user["level"];
         $_SESSION["auth"]->ip = $_SERVER['REMOTE_ADDR'];
         return $this->Retrun("Login was successful", true);
@@ -164,7 +166,6 @@ class Router
     unset($_SESSION["auth"]);
     return $this->Retrun("The user doesn't exist or the password isn't correct");
   }
-
   function postLogout(): object
   {
     if(isset($_SESSION) && isset($_SESSION["auth"]) && $_SESSION['auth']->ip == $_SERVER['REMOTE_ADDR']) {

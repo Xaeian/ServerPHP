@@ -1,5 +1,6 @@
 app/*
 !app/auth/
+app/auth/users.csv
 !app/file/
 app/file/*/
 !app/file/#/
