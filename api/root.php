@@ -38,6 +38,7 @@ class ROOT
 {
   public string $path;
   public array $arg;
+  public string $app;
   public string $method;
   public string $host;
   public array $files = [];
@@ -70,6 +71,8 @@ class ROOT
     session_start();
     if(isset($_SESSION) && isset($_SESSION["auth"]) && $_SESSION['auth']->ip == $_SERVER['REMOTE_ADDR']) {
       $this->auth = $_SESSION["auth"];
+      $_SESSION["auth"] = clone $this->auth;
+      $_SESSION["time"] = gmdate("Y-m-d H:i:s");
       return true;
     }
     unset($_SESSION["auth"]);

@@ -2,6 +2,11 @@
 
 class Router
 {
+  public object|null $auth;
+  public string $file;
+  public array $users;
+  public int $nextID;
+
   private const CREATE_AUTH =
   <<< SQL
   CREATE TABLE auth
@@ -35,7 +40,8 @@ class Router
           default => $value
         };
       }
-      $this->nextID = (int)$user["id"] + 1;
+      $id = (int)$user["id"];
+      if($id >= $this->nextID) $this->nextID = $id + 1;
     }
   }
 
@@ -50,9 +56,9 @@ class Router
   function Build()
   {
     // if(storage IS mysql OR postgres OR sqlite)
-    $this->conn->createDatabase($this->conn->db);
-    $this->conn->dropTable($this->table);
-    $this->conn->Run(self::CREATE_AUTH);
+    // $this->conn->createDatabase($this->conn->db);
+    // $this->conn->dropTable($this->table);
+    // $this->conn->Run(self::CREATE_AUTH);
   }
 
   static function Retrun($message, $status = false): object
@@ -80,7 +86,8 @@ class Router
   private function UserValidation(string $user): null|string
   {
     if(!$user) return "No Username";
-    if(preg_match("/^[0-9A-Za-z_\-]+/", $user)) return "Username can contain only uppercase and lowercase letters, numbers and special chars '_', '-'";
+    echo $user;
+    if(preg_match("/[^0-9A-Za-z_\-]+/", $user)) return "Username can contain only uppercase and lowercase letters, numbers and special chars '_', '-'";
     return null;
   }
 
@@ -124,7 +131,8 @@ class Router
       "password" => self::PasswordEncryption($this->props->password),
       "active" => true,
       "level" => $this->props->level,
-      "created_at" => date("Y-m-d H:i:s")
+      "created_at" => gmdate("Y-m-d H:i:s"),
+      "last_activity" => NULL
     ];
     array_push($this->users, $new);
     csv_save($this->file, $this->users);
@@ -152,20 +160,26 @@ class Router
     $name = strtolower($this->props->user);
     $passwd = $this->props->password;
     $passwd = self::PasswordEncryption($passwd);
-    foreach($this->users as $user) {
+    foreach($this->users as $i => $user) {
       if($user["active"] && (strtolower($user["name"]) == $name || $user["email"] == $name) && $user["password"] == $passwd) {
         $_SESSION["auth"] = new stdClass();
         $_SESSION["auth"]->id = $user["id"];
-        $_SESSION["auth"]->user = $user["name"];
+        $_SESSION["auth"]->name = $user["name"];
         $_SESSION["auth"]->email = $user["email"];
         $_SESSION["auth"]->level = (int)$user["level"];
         $_SESSION["auth"]->ip = $_SERVER['REMOTE_ADDR'];
-        return $this->Retrun("Login was successful", true);
+        $_SESSION["time"] = gmdate("Y-m-d H:i:s");
+        $this->users[$i]["last_activity"] = $_SESSION["time"];
+        csv_save($this->file, $this->users);
+        $return = $this->Retrun("Login was successful", true);
+        $return->user = ["name" => $user["name"], "email" => $user["email"], "level" => $user["level"]];
+        return $return;
       }
     }
     unset($_SESSION["auth"]);
     return $this->Retrun("The user doesn't exist or the password isn't correct");
   }
+
   function postLogout(): object
   {
     if(isset($_SESSION) && isset($_SESSION["auth"]) && $_SESSION['auth']->ip == $_SERVER['REMOTE_ADDR']) {

@@ -1,15 +1,16 @@
 <?php
 
 ob_start();
-$ini = parse_ini_file(__DIR__ . "/api.ini", true, INI_SCANNER_TYPED);
 const ROOT_PATH = __DIR__ . "/../";
-require_once($ini["lib"]);
+$ini = parse_ini_file(ROOT_PATH . "/cfg/server.ini", true, INI_SCANNER_TYPED);
+require_once(ROOT_PATH . "/lib/php/__main.php");
+require_once(__DIR__ . "/head.php");
 require_once(__DIR__ . "/root.php");
 include_library("log", "time");
 
 $root = new ROOT();
 
-if($ini["auth"] && !$root->Auth()) {
+if($ini["auth"]["enable"] && !$root->Auth()) {
   $res = "Requires authorization";
   goto api_index_end;
 }
@@ -41,5 +42,3 @@ if($ini["debug"]["enable"]) debugger($ini["debug"], $root, $res);
 else ob_get_clean();
 
 ROOT::Exit($res);
-
-

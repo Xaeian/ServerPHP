@@ -1,11 +1,13 @@
 @host = http://localhost:8080
 #@host = http://api.server.pl
 
+//--------------------------------------------------------- Login
+
 POST {{host}}/auth/login/ HTTP/1.1
 content-type: text/plain
 
-{ "user": "admin", "password": "sqrt" }
-### login by JSON
+{ "user": "user", "password": "sqrt" }
+### Login by JSON
 
 POST {{host}}/auth/login/ HTTP/1.1
 content-type: multipart/form-data; boundary=boundary
@@ -13,15 +15,22 @@ content-type: multipart/form-data; boundary=boundary
 --boundary
 Content-Disposition: form-data; name="user"
 
-test
+admin
 --boundary
 Content-Disposition: form-data; name="password"
 
 sqrt
-### login by FORM
+### Login by FORM
+
+//--------------------------------------------------------- Logout
+
+POST {{host}}/auth/logout/ HTTP/1.1
+### Logout
+
+//--------------------------------------------------------- Create
 
 POST {{host}}/auth/create/ HTTP/1.1
 content-type: text/plain
 
-{ "user": "newuser", "email": "newemail@sqrt.pl", "password": "myp@ssw0rd" }
-### create new user
+{ "user": "newuser", "email": "newemail@sqrt.pl", "password": "MyP@ssw0rd" }
+### Create new user
