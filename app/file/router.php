@@ -23,7 +23,7 @@ class Router
   }
 
   private function ReplyFile($url)
-  {
+  { 
     $fp = fopen($url, 'rb');
     header("Content-Type: " . match($this->ext) {
       "jpg", "jpeg"  => "image/jpg",

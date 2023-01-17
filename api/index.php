@@ -41,4 +41,9 @@ api_index_end:
 if($ini["debug"]["enable"]) debugger($ini["debug"], $root, $res);
 else ob_get_clean();
 
+if($ini["cors"] == "bypass") {
+  $origin = $_SERVER["HTTP_ORIGIN"] ?: "*";
+  header("Access-Control-Allow-Origin: " . $origin);
+}
+
 ROOT::Exit($res);

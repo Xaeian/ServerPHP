@@ -1,7 +1,7 @@
 @host = http://localhost:8080
-#@host = http://api.server.pl
+#@host = http://api.localhost
 
-//--------------------------------------------------------- Login
+//----------------------------------------------- Login
 
 POST {{host}}/auth/login/ HTTP/1.1
 content-type: text/plain
@@ -22,14 +22,14 @@ Content-Disposition: form-data; name="password"
 sqrt
 ### Login by FORM
 
-//--------------------------------------------------------- Logout
+//----------------------------------------------- Logout
 
 POST {{host}}/auth/logout/ HTTP/1.1
 ### Logout
 
-//--------------------------------------------------------- Create
+//----------------------------------------------- Create
 
-POST {{host}}/auth/create/ HTTP/1.1
+PUT {{host}}/auth/create/ HTTP/1.1
 content-type: text/plain
 
 { "user": "newuser", "email": "newemail@sqrt.pl", "password": "MyP@ssw0rd" }

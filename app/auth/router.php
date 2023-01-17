@@ -20,6 +20,10 @@ class Router
   )
   SQL;
 
+  private array $arg;
+  private string $service;
+  private ?object $props;
+  
   private const NOT_PERMISSIONS = "You are not permissions to perform this operation";
 
   function __construct(ROOT $root)
@@ -110,7 +114,7 @@ class Router
     return null;
   }
 
-  function postCreate(): object
+  function putCreate(): object
   {
     if(!$this->AreYouAdmin()) return $this->Retrun(self::NOT_PERMISSIONS);
     if($missing = required_fields($this->props, ["user", "email", "password"])) {

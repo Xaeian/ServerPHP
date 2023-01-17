@@ -52,7 +52,7 @@ class ROOT
     $this->app = array_shift($this->arg);
     $this->method = strtolower($_SERVER["REQUEST_METHOD"]);
     $this->host = strtolower($_SERVER['HTTP_HOST']);
-    $type = (isset($_SERVER["CONTENT_TYPE"]) ? strtolower($_SERVER["CONTENT_TYPE"]) : null);
+    $type = (isset($_SERVER["CONTENT_TYPE"]) ? strtolower($_SERVER["CONTENT_TYPE"]) : "");
     $this->files = normalize_upload_files($_FILES);
     if($type == "application/json" || $type == "text/plain") // JSON Applications
       $this->props = json_decode(file_get_contents('php://input'));
