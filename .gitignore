@@ -5,7 +5,6 @@ app/auth/users.csv
 app/file/*/
 !app/file/#/
 web/*
-cfg/server.ini
 scr/*
 lib/*
 !app/readme.md
