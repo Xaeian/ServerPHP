@@ -6,7 +6,7 @@
 POST {{host}}/auth/login/ HTTP/1.1
 content-type: text/plain
 
-{ "user": "user", "password": "sqrt" }
+{ "user": "admin", "password": "p@ssWd40" }
 ### Login by JSON
 
 POST {{host}}/auth/login/ HTTP/1.1
@@ -32,5 +32,5 @@ POST {{host}}/auth/logout/ HTTP/1.1
 PUT {{host}}/auth/create/ HTTP/1.1
 content-type: text/plain
 
-{ "user": "newuser", "email": "newemail@sqrt.pl", "password": "MyP@ssw0rd" }
+{ "user": "myuser", "email": "my@mail.pl", "password": "MyP@ssw0rd" }
 ### Create new user

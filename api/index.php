@@ -23,18 +23,19 @@ if(file_exists($include)) {
   $res = $router->Run();
 }
 
-function debugger(array $debug, ROOT &$root, array|object|string|null $res)
+function debugger(array $debug, ROOT &$root, array|object|string|null $resp)
 {
-  $log = new LOG($root->path . "api/api.log", $debug["lineLimit"], "s", true, 4, $debug["messageLimit"]);
+  $log = new LOG(__DIR__ . "/api.log", __DIR__ . "/log/", $debug["lineLimit"]);
   if($debug["url"]) {
-    $url = strtoupper($root->method) . " " . $root->host . "/" . $root->app . "/";
+    $url = strtoupper($root->method) . " " . $root->protocol . $root->host . "/" . $root->app . "/";
     foreach($root->arg as $arg) $url .= $arg . "/";
-    $log->Record($url, "url");
+    $log->Push($url);
   }
-  if($debug["request"] && $root->props) $log->RecordUnknown($root->props, "req");
-  if($debug["file"] && $root->files) $log->RecordUnknown($root->files, "file");
-  if($debug["clear"] && ($clear = ob_get_clean())) $log->RecordUnknown($clear, "clr");
-  if($debug["response"]) $log->RecordUnknown($res, "res");
+  if($debug["request"] && $root->props) $log->Push("REQ", $root->props); 
+  if($debug["files"] && $root->files) $log->Push("FILE", $root->files);
+  if($debug["clear"] && ($clear = ob_get_clean())) $log->Push("CLR", LOG::File($clear));
+  if($debug["response"]) $log->Push("RES", LOG::Var($resp));
+  $log->Send("info");
 }
 
 api_index_end:
@@ -42,7 +43,7 @@ if($ini["debug"]["enable"]) debugger($ini["debug"], $root, $res);
 else ob_get_clean();
 
 if($ini["cors"] == "bypass") {
-  $origin = $_SERVER["HTTP_ORIGIN"] ?: "*";
+  $origin = isset($_SERVER["HTTP_ORIGIN"]) ? $_SERVER["HTTP_ORIGIN"] : "*";
   header("Access-Control-Allow-Origin: " . $origin);
 }
 

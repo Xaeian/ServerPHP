@@ -2,7 +2,7 @@
 
 class Router
 {
-  public object|null $auth;
+  public ?object $auth;
   public string $file;
   public array $users;
   public int $nextID;
@@ -105,7 +105,7 @@ class Router
   private function PasswordValidation(string $password): null|string
   {
     if(!$password) return "No password";
-    if(strlen($password) <= '8') return "Password have to contain at least 8 characters";
+    if(strlen($password) < '8') return "Password have to contain at least 8 characters";
     if(!preg_match("/[0-9]+/", $password)) return "Password have to contain at least 1 number";
     if(!preg_match("/[A-Z]+/", $password)) return "Password have to contain at least 1 capital letter";
     if(!preg_match("/[a-z]+/", $password)) return "Password have to contain at least 1 lowercase letter";

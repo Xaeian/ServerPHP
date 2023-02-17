@@ -40,6 +40,7 @@ class ROOT
   public array $arg;
   public string $app;
   public string $method;
+  public string $protocol;
   public string $host;
   public array $files = [];
   public object|array|null $props = null;
@@ -50,6 +51,7 @@ class ROOT
     $this->path = path_pretty(ROOT_PATH, false);
     $this->arg = explode("/", trim(parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH), "\/"));
     $this->app = array_shift($this->arg);
+    $this->protocol = stripos($_SERVER['SERVER_PROTOCOL'],'https') === 0 ? 'https://' : 'http://';
     $this->method = strtolower($_SERVER["REQUEST_METHOD"]);
     $this->host = strtolower($_SERVER['HTTP_HOST']);
     $type = (isset($_SERVER["CONTENT_TYPE"]) ? strtolower($_SERVER["CONTENT_TYPE"]) : "");
