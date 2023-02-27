@@ -9,23 +9,15 @@ require_once(__DIR__ . "/root.php");
 include_library("log", "time");
 
 $root = new ROOT();
+$log = new LOG(__DIR__ . "/api.log", __DIR__ . "/log/", $ini["debug"]["lineLimit"]);
 
-if($ini["auth"]["enable"] && !$root->Auth()) {
-  $res = "Requires authorization";
-  goto api_index_end;
-}
+//------------------------------------------------------------------------------------------------- FNC
 
-$include = ROOT_PATH . "app/" . $root->app . "/router.php";
-$res = "";
-if(file_exists($include)) {
-  require_once($include);
-  $router = new Router($root);
-  $res = $router->Run();
-}
-
-function debugger(array $debug, ROOT &$root, array|object|string|null $resp)
+function api_debugger(array|object|string|null $resp = NULL)
 {
-  $log = new LOG(__DIR__ . "/api.log", __DIR__ . "/log/", $debug["lineLimit"]);
+  global $ini, $log, $root;
+  $debug = $ini["debug"];
+  if(!$debug["enable"]) { ob_get_clean(); return; }
   if($debug["url"]) {
     $url = strtoupper($root->method) . " " . $root->protocol . $root->host . "/" . $root->app . "/";
     foreach($root->arg as $arg) $url .= $arg . "/";
@@ -38,13 +30,37 @@ function debugger(array $debug, ROOT &$root, array|object|string|null $resp)
   $log->Send("info");
 }
 
-api_index_end:
-if($ini["debug"]["enable"]) debugger($ini["debug"], $root, $res);
-else ob_get_clean();
-
-if($ini["cors"] == "bypass") {
-  $origin = isset($_SERVER["HTTP_ORIGIN"]) ? $_SERVER["HTTP_ORIGIN"] : "*";
-  header("Access-Control-Allow-Origin: " . $origin);
+function api_cors()
+{
+  global $ini, $log;
+  if($ini["cors"] == "bypass") {
+    $origin = isset($_SERVER["HTTP_ORIGIN"]) ? $_SERVER["HTTP_ORIGIN"] : "*";
+    header("Access-Control-Allow-Origin: " . $origin);
+  }
 }
 
-ROOT::Exit($res);
+function api_response($resp) {
+  api_debugger($resp);
+  api_cors();
+  ROOT::Exit($resp);
+}
+
+function api_auth()
+{
+  global $ini, $root;
+  if($ini["auth"]["enable"] && !$root->Auth()) {
+    api_response("Requires authorization");
+  }
+}
+
+//------------------------------------------------------------------------------------------------- RUM
+
+api_auth();
+
+$include = ROOT_PATH . "app/" . $root->app . "/router.php";
+if(file_exists($include)) {
+  require_once($include);
+  $router = new Router($root);
+  api_response($router->Run());
+}
+else api_response("Service '$root->app' don't exist");

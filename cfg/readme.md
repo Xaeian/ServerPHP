@@ -6,8 +6,20 @@ The information contained in this file can be used by scripts placed in the `~sc
 An example configuration file:
 
 ```ini
+cors = bypass
+
 [auth]
+enable = false
 storage = csv
+
+[debug]
+enable = true
+lineLimit = 100000
+url = true
+request = true
+files = true
+clear = true
+response = true
 
 [mysql]
 host = localhost
@@ -21,8 +33,11 @@ token = "influxdb-token-code"
 ...
 ```
 
+- `cors` - cross-origin policy support `null`|`bypass`|`whitelist`
 - `auth` - authorization section
-  - `storage` - data storage method `csv`/`mysql`/`sqlite`
+  - `enable` - whether authorization is enabled?
+  - `storage` - data storage method `csv`|`mysql`|`sqlite`
+- `debug` - API debug section
 - `mysql` - data for **MySQL** database
   - `host` - IP address or URL of the database
   - `user` - user with full rights (administrator)
