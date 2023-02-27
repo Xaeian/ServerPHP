@@ -14,7 +14,7 @@ class Router
     if(strtolower($root->method) == "get") $this->goto = "File";
   }
 
-  public function Run(): array|object|string|null
+  public function Run(): mixed
   {
     if(method_exists($this, $this->goto)) {
       return $this->{$this->goto}();

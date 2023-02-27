@@ -13,10 +13,11 @@ $log = new LOG(__DIR__ . "/api.log", __DIR__ . "/log/", $ini["debug"]["lineLimit
 
 //------------------------------------------------------------------------------------------------- FNC
 
-function api_debugger(array|object|string|null $resp = NULL)
+function api_debugger(mixed $resp = false)
 {
   global $ini, $log, $root;
   $debug = $ini["debug"];
+  if($resp === false) $debug["response"] = false;
   if(!$debug["enable"]) { ob_get_clean(); return; }
   if($debug["url"]) {
     $url = strtoupper($root->method) . " " . $root->protocol . $root->host . "/" . $root->app . "/";
