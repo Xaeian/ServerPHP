@@ -16,20 +16,26 @@ For more convenient work with logs can be adjusted **visual studio code** settin
 ```json
 {
   "logFileHighlighter.customPatterns": [
-    { "pattern": "URL", "foreground": "#777" },
-    { "pattern": "CLR", "foreground": "#777" },
-    { "pattern": "FILE", "foreground": "#777" },
-    { "pattern": "REQ", "foreground": "#777" },
-    { "pattern": "RES", "foreground": "#777" }
+    { "pattern": "http://", "foreground": "#777" },
+    { "pattern": "https://", "foreground": "#777" },
+    { "pattern": "file://", "foreground": "#777" },
+    { "pattern": "GET", "foreground": "#c486ba" },
+    { "pattern": "POST", "foreground": "#c486ba" },
+    { "pattern": "PUT", "foreground": "#c486ba" },
+    { "pattern": "PATCH", "foreground": "#c486ba" },
+    { "pattern": "DELETE", "foreground": "#c486ba" },
+    { "pattern": "CONNECT", "foreground": "#c486ba" },
+    { "pattern": "OPTIONS", "foreground": "#c486ba" },
+    { "pattern": "TRACE", "foreground": "#c486ba" }
   ],
   "editor.tokenColorCustomizations": {
     "textMateRules": [
-      { "scope": "log.error", "settings": { "foreground": "#f16359", "fontStyle": "" } },
-      { "scope": "log.warning","settings": { "foreground": "#faa82c", "fontStyle": "" } },
-      { "scope": "log.info", "settings": { "foreground": "#59a2d9","fontStyle": "" } },
-      { "scope": "log.debug", "settings": { "foreground": "#2fb885", "fontStyle": "" } },
-      { "scope": "log.constant", "settings": { "foreground": "#c849cc", "fontStyle": "" } },
-      { "scope": "log.date", "settings": { "foreground": "#46c4af", "fontStyle": "" } },
+      { "scope": "log.error", "settings": { "foreground": "#d15148", "fontStyle": "" }},
+      { "scope": "log.warning", "settings": { "foreground": "#dd9528", "fontStyle": "" }},
+      { "scope": "log.info", "settings": { "foreground": "#579cd4", "fontStyle": "" }},
+      { "scope": "log.debug", "settings": { "foreground": "#67ca7c", "fontStyle": "" }},
+      { "scope": "log.constant", "settings": { "foreground": "#b5cda8", "fontStyle": "" }},
+      { "scope": "log.date", "settings": { "foreground": "#4eb6a4", "fontStyle": "" }}
     ]
   }
 }
