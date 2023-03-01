@@ -3,6 +3,12 @@
 ob_start();
 const ROOT_PATH = __DIR__ . "/../";
 $ini = parse_ini_file(ROOT_PATH . "/cfg/server.ini", true, INI_SCANNER_TYPED);
+
+if($ini["redirection"] && $_SERVER["REQUEST_URI"] == "/") {
+  require_once($ini["redirection"]);
+  return;
+}
+
 require_once(ROOT_PATH . "/lib/php/__main.php");
 require_once(__DIR__ . "/head.php");
 require_once(__DIR__ . "/root.php");
