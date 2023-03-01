@@ -10,12 +10,19 @@ if($ini["redirection"] && $_SERVER["REQUEST_URI"] == "/") {
 }
 
 require_once(ROOT_PATH . "/lib/php/__main.php");
-require_once(__DIR__ . "/head.php");
 require_once(__DIR__ . "/root.php");
 include_library("log", "time");
 
 $root = new ROOT();
 $log = new LOG(__DIR__ . "/api.log", __DIR__ . "/log/", $ini["debug"]["lineLimit"]);
+
+if($ini["cookie"]["enable"]) {
+  session_set_cookie_params([
+    "SameSite" => $ini["cookie"]["sameSite"],
+    "Secure" => $ini["cookie"]["sameSite"] ? "true" : "false",
+    "HttpOnly" => $ini["cookie"]["httpOnly"] ? "true" : "false"
+  ]);
+}
 
 //------------------------------------------------------------------------------------------------- FNC
 
@@ -39,7 +46,7 @@ function api_debugger(mixed $resp = false)
 
 function api_cors()
 {
-  global $ini, $log;
+  global $ini;
   if($ini["cors"] == "bypass") {
     $origin = isset($_SERVER["HTTP_ORIGIN"]) ? $_SERVER["HTTP_ORIGIN"] : "*";
     header("Access-Control-Allow-Origin: " . $origin);
