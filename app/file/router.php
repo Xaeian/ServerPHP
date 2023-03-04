@@ -3,22 +3,26 @@
 class Router
 {
   private string $goto;
-  private string $url;
+  private string $url = "";
   private string $ext;
   private null|array|object $props;
 
   public function __construct(ROOT $root)
   {
-    $this->url = path_pretty(__DIR__ . "/" . implode("/", $root->arg));
+    $redirect = parse_ini_file(__DIR__ . "/redirect.ini", true, INI_SCANNER_TYPED);
+    if(count($root->arg) <= 1) return;
+    $fileset = array_shift($root->arg);
+    if(in_array($fileset, array_keys($redirect))) $dir = $redirect[$fileset];
+    else $dir = __DIR__ . "/$fileset";
+    $this->url = $dir . "/" . implode("/", $root->arg);
     $this->ext = pathinfo($this->url, PATHINFO_EXTENSION);
     if(strtolower($root->method) == "get") $this->goto = "File";
   }
 
   public function Run(): mixed
   {
-    if(method_exists($this, $this->goto)) {
-      return $this->{$this->goto}();
-    }
+    if(!$this->url) return "You need to pass dataset as the first argument";
+    if(method_exists($this, $this->goto)) return $this->{$this->goto}();
     return "File service doesn't support '$this->goto' request";
   }
 
@@ -42,8 +46,8 @@ class Router
   function File()
   {
     if(file_exists($this->url)) $this->ReplyFile($this->url);
-    $notfound = __DIR__ . "/#/not-found." . $this->ext;
-    if(file_exists($notfound)) $this->ReplyFile($notfound);
+    $nfound = __DIR__ . "/#/nfound." . $this->ext;
+    if(file_exists($nfound)) $this->ReplyFile($nfound);
     $readme = __DIR__ . "/readme.md";
     $this->ReplyFile($readme);
   }

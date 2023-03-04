@@ -4,6 +4,7 @@ app/auth/users.csv
 !app/file/
 app/file/*/
 !app/file/#/
+app/file/redirect.ini
 cfg/server.ini
 web/*
 scr/*
