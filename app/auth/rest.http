@@ -13,11 +13,11 @@ POST {{host}}/auth/login/ HTTP/1.1
 content-type: multipart/form-data; boundary=boundary
 
 --boundary
-Content-Disposition: form-data; name="user"
+Content-Disposition: form-data; name="admin"
 
 admin
 --boundary
-Content-Disposition: form-data; name="password"
+Content-Disposition: form-data; name="p@ssWd40"
 
 sqrt
 ### Login by FORM

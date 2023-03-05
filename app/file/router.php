@@ -9,10 +9,12 @@ class Router
 
   public function __construct(ROOT $root)
   {
-    $redirect = parse_ini_file(__DIR__ . "/redirect.ini", true, INI_SCANNER_TYPED);
+    $ini = __DIR__ . "/redirect.ini";
+    if(file_exists($ini)) $redirect = parse_ini_file($ini, true, INI_SCANNER_TYPED);
+    else $redirect = NULL;
     if(count($root->arg) <= 1) return;
     $fileset = array_shift($root->arg);
-    if(in_array($fileset, array_keys($redirect))) $dir = $redirect[$fileset];
+    if($redirect && in_array($fileset, array_keys($redirect))) $dir = $redirect[$fileset];
     else $dir = __DIR__ . "/$fileset";
     $this->url = $dir . "/" . implode("/", $root->arg);
     $this->ext = pathinfo($this->url, PATHINFO_EXTENSION);
